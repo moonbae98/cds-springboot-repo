@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.UserMapper">
+	<!-- namespace : XML파일에서 내용의 구분을 위해서 사용 -->
+
+	<insert id="signup"
+		parameterType="com.example.demo.dto.UserDTO">
+		<!-- sql구분을 가지고 있는 태그는 SQL구문의 종류(SELECT,insert,update,delete)에 따라 구분됨 id는 
+			SQL구문을 구분하는 역할, 고유의 값을 가짐 , DAO에서 Mapper 내에 있는 SQL구문을 찾는데 사용됨 parameterType 
+			: DAO에서 SQL구분을 사용하면서 전달하는 매개변수의 데이터 타입 resultType: SQL구문 실행 후 반환되는 데이터 타입 
+			SQL문에 입력값을 세팅하는 것은 #{입력값을 가지고 있는 변수명} ~MyBatis에서 get,set메소드를 이용해서 처리해줌 -->
+
+		insert into tb_user (u_idx, user_name, user_id, user_pw,
+		phone,birthday)
+		values (tb_user_seq.nextval,
+		#{userName},#{userId},#{userPw},#{phone},#{birthday})
+
+	</insert>
+
+	<select id="getUserList"
+		resultType="com.example.demo.dto.UserDTO">
+		select * from tb_user
+	</select>
+
+	<update id="updateUser"
+		parameterType="com.example.demo.dto.UserDTO">
+		update tb_user
+		set user_name = #{userName}, user_pw = #{userPw}, birthday = #{birthday},
+		phone = #{phone}
+		where user_id = #{userId}
+	</update>
+
+	<select id="login" parameterType="com.example.demo.dto.UserDTO"
+		resultType="com.example.demo.dto.UserDTO">
+		select * from tb_user where user_id = #{userId} and user_pw =#{userPw}
+		and user_status ='N'
+
+	</select>
+
+	<select id="getUser" parameterType="_int"
+		resultType="com.example.demo.dto.UserDTO">
+		select * from tb_user where u_idx = #{uIdx}
+
+
+	</select>
+
+
+	<update id="deleteUser" parameterType="_int">
+		update tb_user
+		set user_status='Y'
+		where u_idx=#{uIdx}
+	</update>
+</mapper>
